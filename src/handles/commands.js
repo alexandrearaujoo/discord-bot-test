@@ -1,26 +1,25 @@
 const { readdirSync } = require("fs");
+const path = require("path");
 
 module.exports = (client) => {
   const slashCommands = [];
 
-  const load = async (dirs) => {
-    const commands = readdirSync(`./src/commands/${dirs}/`).filter((file) =>
-      file.endsWith(".js")
-    );
+  const commandsPath = path.join(__dirname, '..', "commands");
+  const commandFiles = readdirSync(commandsPath).filter((file) =>
+    file.endsWith(".js")
+  );
 
-    for (const file of commands) {
-      const command = require(`../commands/${dirs}/${file}`);
+  for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
 
-      client.commands.set(command.name, command);
-      slashCommands.push(command);
-
-      console.log(`o comando ${command.name} foi carregado com sucesso`);
+    if ("data" in command && "execute" in command) {
+      client.commands.set(command.data.name, command);
+      slashCommands.push(command.data.toJSON());
+    } else {
+      console.log(
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+      );
     }
-  };
-
-  client.on("ready", async () => {
-    await client.application.commands.set(slashCommands);
-  });
-
-  readdirSync("./src/commands").forEach((x) => load(x));
+  }
 };

@@ -9,10 +9,10 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
-  ]
+  ],
 });
 
-["commands", "aliases"].forEach((file) => client[file] = new Collection());
-['commands', 'events'].forEach(f => require(`./handles/${f}`)(client));
+["commands", "aliases"].forEach((file) => (client[file] = new Collection()));
+["commands", "events"].forEach((f) => require(`./handles/${f}`)(client));
 
 client.login(process.env.TOKEN);

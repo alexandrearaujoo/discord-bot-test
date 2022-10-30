@@ -1,19 +1,20 @@
 const { readdirSync } = require("fs");
+const path = require("path");
 
 module.exports = (client) => {
-  const load = (dirs) => {
-    const events = readdirSync(`./src/events/${dirs}/`).filter((file) =>
-      file.endsWith(".js")
-    );
+  const eventsPath = path.join(__dirname, "..", "events");
+  const eventFiles = readdirSync(eventsPath).filter((file) =>
+    file.endsWith(".js")
+  );
 
-    for (let file of events) {
-      const event = require(`../events/${dirs}/${file}`);
-      let eventName = file.split(".")[0];
+  for (const file of eventFiles) {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
 
-      console.log(`o evento ${eventName} foi carregado com sucesso`);
-
-      client.on(eventName, event.bind(null, client));
+    if (event.once) {
+      client.once(event.name, (...args) => event.execute(...args));
+    } else {
+      client.on(event.name, (...args) => event.execute(...args));
     }
-  };
-  readdirSync("./src/events/").forEach((x) => load(x));
+  }
 };
