@@ -1,13 +1,15 @@
+const { REST, Routes } = require("discord.js");
 const { readdirSync } = require("fs");
-const path = require("path");
+const path = require("node:path");
 
-module.exports = (client) => {
+module.exports = async (client) => {
   const slashCommands = [];
 
-  const commandsPath = path.join(__dirname, '..', "commands");
+  const commandsPath = path.join(__dirname, "..", "commands");
   const commandFiles = readdirSync(commandsPath).filter((file) =>
     file.endsWith(".js")
   );
+  const restClient = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
@@ -22,4 +24,8 @@ module.exports = (client) => {
       );
     }
   }
+
+  await restClient.put(Routes.applicationCommands("1037720242329243680"), {
+    body: slashCommands,
+  });
 };

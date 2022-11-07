@@ -1,10 +1,10 @@
-const discord = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  data: new discord.SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName("avatar")
     .setDescription("Veja o avatar de um usuario")
-    .addStringOption((options) =>
+    .addUserOption((options) =>
       options
         .setName("usuario")
         .setDescription("Usuario para ver avatar")
@@ -21,7 +21,7 @@ module.exports = {
       person = userMention;
     }
 
-    const embed = new discord.EmbedBuilder()
+    const embed = new EmbedBuilder()
       .setTitle(`Imagem de ${person.username}`)
       .setImage(person.displayAvatarURL())
       .setURL(person.avatarURL({ format: "png", dynamic: true, size: 1024 }));

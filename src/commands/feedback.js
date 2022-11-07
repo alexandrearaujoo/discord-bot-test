@@ -1,4 +1,7 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,10 +15,19 @@ module.exports = {
     ),
   async execute(interaction) {
     const message = interaction.options.getString("feedback");
-    const username = interaction.user.username;
+    const { username } = interaction.user;
 
-    await interaction.reply({
-      content: `Hey ${username}, thanks for the feedback. Mensagem: ${message}`,
+    await interaction.reply("Working on it");
+
+    await prisma.feedback.create({
+      data: {
+        username,
+        message,
+      },
+    });
+
+    await interaction.editReply({
+      content: `Hey ${username}, thanks for the feedback.`,
       ephemeral: true,
     });
   },
