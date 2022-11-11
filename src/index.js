@@ -29,7 +29,7 @@ const client = new Client({
 ["commands", "events"].forEach((file) => require(`./handles/${file}`)(client));
 
 client.login(
-  "MTAzNzcyMDI0MjMyOTI0MzY4MA.Gj6mp5.UUH9WnWSAcPAQ2m9zsPOOURTjClFtNeyZp3_Jk"
+  process.env.TOKEN
 );
 
 const metadata = {
