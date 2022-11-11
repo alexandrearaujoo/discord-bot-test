@@ -14,9 +14,9 @@ module.exports = {
 
     await interaction.reply("Working on it...");
 
-    const { data } = await findServerById(id);
+    const { serversCollection } = await findServerById(id);
 
-    if (data.serversCollection.edges.length >= 1) {
+    if (serversCollection.edges.length >= 1) {
       await interaction.editReply({
         content: "This server already registered",
       });

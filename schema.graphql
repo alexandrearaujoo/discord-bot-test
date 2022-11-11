@@ -442,7 +442,7 @@ type server_tokensInsertResponse {
 
   """Array of records impacted by the mutation"""
   records: [server_tokens!]!
-}
+} 
 
 input server_tokensOrderBy {
   server_id: OrderByDirection
@@ -602,7 +602,7 @@ type tokensEdge {
 }
 
 input tokensFilter {
-  id: StringFilter
+  id: StringFilter 
 }
 
 input tokensInsertInput {

@@ -1,22 +1,22 @@
 const { gql } = require("@apollo/client/core");
 const { graphQlClient } = require("../../lib/graphQlClient");
 
-module.exports = async (id, name) => {
+module.exports = async (serverId, tokenId) => {
   const { data } = await graphQlClient.mutate({
     mutation: gql`
-      mutation RegisterServer($objects: serverInsertInput!) {
-        insertIntoserversCollection(objects: [$objects]) {
+      mutation InsertTokenIntoServer($objects: server_tokensInsertInput) {
+        insertIntoserver_tokensCollection(objects: [$objects]) {
           records {
-            id
-            name
+            server_id
+            token_id
           }
         }
       }
     `,
     variables: {
       objects: {
-        id,
-        name,
+        server_id: serverId,
+        token_id: tokenId,
       },
     },
   });
